@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Fantasy | Ultimate F1 League</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #0d0d0d; font-family: 'Rajdhani', sans-serif; color: #e5e5e5; }
+        .f1-font { font-family: 'Orbitron', sans-serif; }
+        .gold-grad {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block !important; }
+    </style>
+</head>
+<body>
+
+    <nav class="border-b border-[#2A2A2A] bg-[#121212] px-6 py-4 flex justify-between items-center relative z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-6 bg-gradient-to-b from-[#BF953F] to-[#AA771C] transform -skew-x-12"></div>
+            <span class="f1-font text-xl font-black tracking-wider text-white">ULTIMATE <span class="gold-grad">FANTASY</span></span>
+        </div>
+        <div class="flex space-x-6 text-sm font-bold tracking-widest uppercase f1-font">
+            <button onclick="cambiarPestana('equipo')" id="btn-equipo" class="text-[#BF953F] border-b-2 border-[#BF953F] pb-1 cursor-pointer focus:outline-none">Mi Equipo</button>
+            <button onclick="cambiarPestana('clasificacion')" id="btn-clasificacion" class="text-gray-400 hover:text-[#BF953F] transition cursor-pointer focus:outline-none">Clasificacion</button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-4 py-6">
+        <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 font-bold">Ultimate F1 League</p>
+                <h1 id="titulo-pantalla" class="text-2xl font-black text-white f1-font">Mi Escuderia</h1>
+            </div>
+            <div class="flex gap-8">
+                <div class="text-center">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Presupuesto Disponible</p>
+                    <p id="presupuesto-txt" class="text-3xl font-bold text-emerald-400 f1-font">$100M</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Pilotos</p>
+                    <p id="contador-pilotos" class="text-3xl font-bold text-white f1-font">0 / 5</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="pantalla-equipo" class="tab-content active max-w-7xl mx-auto px-4 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2">
+                <span class="text-[#BF953F]">//</span> Mis Pilotos Contratados
+            </h2>
+            <div id="mi-equipo-lista" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2 pt-4">
+                <span class="text-[#BF953F]">//</span> Constructor Seleccionado
+            </h2>
+            <div id="mi-constructor-zona" class="bg-[#161616] border border-dashed border-[#333] rounded-xl p-6 text-center text-gray-500"></div>
+        </div>
+
+        <div class="space-y-6">
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2">
+                <span class="text-[#BF953F]">//</span> Mercado de Fichajes
+            </h2>
+            <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-4">
+                <h3 class="text-sm font-bold text-[#BF953F] uppercase tracking-wider mb-3 f1-font">Elegir Constructor (Max 1)</h3>
+                <select id="select-constructor" class="w-full bg-[#1f1f1f] border border-[#333] rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-[#BF953F]" onchange="seleccionarConstructor()">
+                    <option value="">-- Selecciona un Equipo --</option>
+                    <option value="Ferrari-22">Ferrari ($22M - TOP)</option>
+                    <option value="RedBull-22">Red Bull ($22M - TOP)</option>
+                    <option value="McLaren-22">McLaren ($22M - TOP)</option>
+                    <option value="Mercedes-22">Mercedes ($22M - TOP)</option>
+                    <option value="Aston-15">Aston Martin ($15M - MEDIA)</option>
+                    <option value="Alpine-15">Alpine ($15M - MEDIA)</option>
+                    <option value="Haas-8">Haas ($8M - BAJA)</option>
+                    <option value="Williams-8">Williams ($8M - BAJA)</option>
+                </select>
+            </div>
+            <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-4 space-y-3 max-h-[500px] overflow-y-auto">
+                <h3 class="text-sm font-bold text-[#BF953F] uppercase tracking-wider mb-2 f1-font">Fichar Pilotos</h3>
+                <div id="mercado-pilotos" class="space-y-2"></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="pantalla-clasificacion" class="tab-content max-w-7xl mx-auto px-4 pb-12">
+        <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2 mb-6">
+            <span class="text-[#BF953F]">//</span> Clasificacion del Campeonato Fantasy
+        </h2>
+        <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-[#2A2A2A] bg-[#1a1a1a] text-xs font-bold uppercase tracking-wider text-gray-400 f1-font">
+                        <th class="p-4 text-center w-16">Pos</th>
+                        <th class="p-4">Participante</th>
+                        <th class="p-4">Constructor</th>
+                        <th class="p-4 text-right">Puntos Totales</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#2A2A2A] text-sm" id="tabla-puntos">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const pilotosDatos = [
+            { nombre: "Alvaro", cat: "TOP", precio: 25 },
+            { nombre: "Asenjo", cat: "TOP", precio: 25 },
+            { nombre: "Pablo", cat: "Media-Alta", precio: 18 },
+            { nombre: "Mariux", cat: "Media-Alta", precio: 18 },
+            { nombre: "Jose", cat: "Media-Alta", precio: 18 },
+            { nombre: "Noah", cat: "Media-Alta", precio: 18 },
+            { nombre: "Eric", cat: "Media-Alta", precio: 18 },
+            { nombre: "Hugo", cat: "Media-Alta", precio: 18 },
+            { nombre: "Fran", cat: "Media-Alta", precio: 18 },
+            { nombre: "Daniel", cat: "Media-Alta", precio: 18 },
+            { nombre: "Ivan", cat: "Media", precio: 12 },
+            { nombre: "Javier", cat: "Media", precio: 12 },
+            { nombre: "Mario", cat: "Media", precio: 12 },
+            { nombre: "Adrian", cat: "Media", precio: 12 },
+            { nombre: "Miguez", cat: "Media", precio: 12 },
+            { nombre: "Cherif", cat: "Media", precio: 12 },
+            { nombre: "Juanmi", cat: "Media", precio: 12 },
+            { nombre: "Samu", cat: "Media", precio: 12 },
+            { nombre: "Asier", cat: "Media", precio: 12 },
+            { nombre: "Joel", cat: "Media", precio: 12 },
+            { nombre: "Seba", cat: "Baja", precio: 6 },
+            { nombre: "Xavi", cat: "Baja", precio: 6 },
+            { nombre: "Joaquin", cat: "Baja", precio: 6 }
+        ];
+
+        // Lista real de los que juegan tu liga Fantasy
+        const amigosClasificacion = [
+            { pos: 1, nombre: "Alvaro Team", motor: "Ferrari", pts: 0 },
+            { pos: 2, nombre: "Asenjo Racing", motor: "Red Bull", pts: 0 },
+            { pos: 3, nombre: "Pablo GP", motor: "McLaren", pts: 0 },
+            { pos: 4, nombre: "Mariux F1", motor: "Mercedes", pts: 0 },
+            { pos: 5, nombre: "Jose Motorsport", motor: "Aston Martin", pts: 0 },
+            { pos: 6, nombre: "Noah Speed", motor: "Alpine", pts: 0 },
+            { pos: 7, font: "Eric", nombre: "Eric Team", motor: "Haas", pts: 0 },
+            { pos: 8, nombre: "Hugo Crew", motor: "Williams", pts: 0 }
+        ];
+
+        let presupuesto = 100;
+        let misPilotos = [];
+        let miConstructor = null;
+        let turboDriver = null;
+
+        function cambiarPestana(pestana) {
+            document.getElementById('pantalla-equipo').classList.remove('active');
+            document.getElementById('pantalla-clasificacion').classList.remove('active');
+            document.getElementById('btn-equipo').className = 'text-gray-400 hover:text-[#BF953F] transition cursor-pointer focus:outline-none';
+            document.getElementById('btn-clasificacion').className = 'text-gray-400 hover:text-[#BF953F] transition cursor-pointer focus:outline-none';
+
+            if(pestana === 'equipo') {
+                document.getElementById('pantalla-equipo').classList.add('active');
+                document.getElementById('btn-equipo').className = 'text-[#BF953F] border-b-2 border-[#BF953F] pb-1 cursor-pointer focus:outline-none';
+                document.getElementById('titulo-pantalla').innerText = "Mi Escuderia";
+            } else {
+                document.getElementById('pantalla-clasificacion').classList.add('active');
+                document.getElementById('btn-clasificacion').className = 'text-[#BF953F] border-b-2 border-[#BF953F] pb-1 cursor-pointer focus:outline-none';
+                document.getElementById('titulo-pantalla').innerText = "Clasificacion";
+            }
+        }
+
+        function cargarMercado() {
+            const contenedor = document.getElementById('mercado-pilotos');
+            if (!contenedor) return;
+            contenedor.innerHTML = '';
+            
+            pilotosDatos.forEach(p => {
+                const yaFichado = misPilotos.some(mp => mp.nombre === p.nombre);
+                contenedor.innerHTML += `
+                    <div class="flex justify-between items-center bg-[#1f1f1f] p-3 rounded border border-gray-800">
+                        <div>
+                            <p class="font-bold text-white text-sm">${p.nombre} <span class="text-xs font-normal text-gray-500">(${p.cat})</span></p>
+                            <p class="text-xs text-[#BF953F] font-bold">$${p.precio}M</p>
+                        </div>
+                        <button onclick="ficharPiloto('${p.nombre}')" ${yaFichado ? 'disabled' : ''} class="text-xs px-3 py-1.5 font-bold rounded uppercase tracking-wider cursor-pointer transition ${yaFichado ? 'bg-gray-800 text-gray-600 cursor-not-allowed' : 'bg-gradient-to-r from-[#BF953F] to-[#AA771C] text-black hover:opacity-90'}">
+                            ${yaFichado ? 'Fichado' : 'Fichar'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function cargarClasificacion() {
+            const tabla = document.getElementById('tabla-puntos');
+            if (!tabla) return;
+            tabla.innerHTML = '';
+            amigosClasificacion.forEach(a => {
+                let colorPos = "text-white";
+                if(a.pos === 1) colorPos = "text-[#BF953F]";
+                if(a.pos === 2) colorPos = "text-gray-400";
+                if(a.pos === 3) colorPos = "text-amber-700";
+
+                tabla.innerHTML += `
+                    <tr class="hover:bg-[#1f1f1f] transition">
+                        <td class="p-4 text-center font-black f1-font text-base ${colorPos}">${a.pos}</td>
+                        <td class="p-4 font-bold text-white">${a.nombre}</td>
+                        <td class="p-4 text-gray-400">${a.motor}</td>
+                        <td class="p-4 text-right font-bold text-white f1-font">${a.pts} PTS</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function ficharPiloto(nombre) {
+            const piloto = pilotosDatos.find(p => p.nombre === nombre);
+            if (misPilotos.length >= 5) { alert("¡Ya tienes el maximo de 5 pilotos!"); return; }
+            if (presupuesto < piloto.precio) { alert("No tienes suficiente presupuesto."); return; }
+            presupuesto -= piloto.precio;
+            misPilotos.push(pot => piloto);
+            misPilotos[misPilotos.length - 1] = piloto; 
+            actualizarUI();
+        }
+
+        function despedirPiloto(nombre) {
+            const piloto = misPilotos.find(p => p.nombre === nombre);
+            presupuesto += piloto.precio;
+            misPilotos = misPilotos.filter(p => p.nombre !== nombre);
+            if (turboDriver === nombre) turboDriver = null;
+            actualizarUI();
+        }
+
+        function seleccionarConstructor() {
+            const select = document.getElementById('select-constructor');
+            if (miConstructor) presupuesto += miConstructor.precio;
+            
+            if (select.value === "") {
+                miConstructor = null;
+            } else {
+                const [nombre, precio] = select.value.split('-');
+                const coste = parseInt(precio);
+                if (presupuesto < coste) {
+                    alert("No te alcanza el dinero.");
+                    select.value = miConstructor ? `${miConstructor.nombre}-${miConstructor.precio}` : "";
+                    presupuesto -= miConstructor ? miConstructor.precio : 0;
+                    return;
+                }
+                presupuesto -= coste;
+                miConstructor = { nombre, precio: coste };
+            }
+            actualizarUI();
+        }
+
+        function asignarTurbo(nombre) { turboDriver = nombre; actualizarUI(); }
+
+        function actualizarUI() {
+            document.getElementById('presupuesto-txt').innerText = `$${presupuesto}M`;
+            document.getElementById('contador-pilotos').innerText = `${misPilotos.length} / 5`;
+            
+            const listaEquipo = document.getElementById('mi-equipo-lista');
+            listaEquipo.innerHTML = '';
+            
+            if (misPilotos.length === 0) {
+                listaEquipo.innerHTML = `<div class="col-span-2 text-center py-8 text-gray-600 border border-dashed border-gray-800 rounded-xl">Tu garaje está vacio. ¡Ficha pilotos en el mercado!</div>`;
+            }
+
+            misPilotos.forEach(p => {
+                const esTD = turboDriver === p.nombre;
+                const aptoTD = p.precio < 20;
+                listaEquipo.innerHTML += `
+                    <div class="bg-[#161616] border ${esTD ? 'border-[#BF953F]' : 'border-[#2A2A2A]'} rounded-xl p-4 relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold tracking-widest text-gray-500">${p.cat}</p>
+                                    <h3 class="text-xl font-bold text-white f1-font">${p.nombre}</h3>
+                                </div>
+                                <span class="text-xs bg-black px-2 py-0.5 rounded text-[#BF953F] font-bold border border-[#BF953F]/30">$${p.precio}M</span>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                ${aptoTD ? `
+                                    <button onclick="asignarTurbo('${p.nombre}')" class="text-[10px] px-2 py-1 font-black rounded tracking-wider cursor-pointer ${esTD ? 'bg-gradient-to-r from-[#BF953F] to-[#AA771C] text-black' : 'bg-[#222] text-gray-400 hover:text-white'}">
+                                        ⚡ ${esTD ? 'TURBO ACTIVO (X2)' : 'ACTIVAR TURBO'}
+                                    </button>
+                                ` : '<span class="text-[10px] text-red-400 font-bold self-center">No apto para Turbo</span>'}
+                            </div>
+                        </div>
+                        <button onclick="despedirPiloto('${p.nombre}')" class="mt-4 text-[10px] text-left text-red-500 hover:text-red-400 uppercase tracking-widest font-bold cursor-pointer">Despedir Piloto</button>
+                    </div>
+                `;
+            });
+
+            const zonaConstructor = document.getElementById('mi-constructor-zona');
+            if (miConstructor) {
+                zonaConstructor.className = "bg-[#161616] border border-[#BF953F] rounded-xl p-6 flex justify-between items-center";
+                zonaConstructor.innerHTML = `<div><p class="text-xs uppercase tracking-wider text-gray-500 font-bold">Constructor Activo</p><h3 class="text-xl font-bold text-white f1-font">${miConstructor.nombre.toUpperCase()}</h3></div><span class="text-sm bg-black px-3 py-1 rounded text-[#BF953F] font-bold border border-[#BF953F]/30">$${miConstructor.precio}M</span>`;
+            } else {
+                zonaConstructor.className = "bg-[#161616] border border-dashed border-[#333] rounded-xl p-6 text-center text-gray-500";
+                zonaConstructor.innerHTML = "No has seleccionado ningun Constructor todavia.";
+            }
+            cargarMercado();
+        }
+        
+        window.onload = function() {
+            actualizarUI();
+            cargarClasificacion();
+        };
+    </script>
+</body>
+</html>
