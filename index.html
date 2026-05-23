@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Fantasy | Ultimate F1 League</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #0d0d0d; font-family: 'Rajdhani', sans-serif; color: #e5e5e5; }
+        .f1-font { font-family: 'Orbitron', sans-serif; }
+        .gold-grad { background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block !important; }
+    </style>
+</head>
+<body>
+
+    <nav class="border-b border-[#2A2A2A] bg-[#121212] px-6 py-4 flex justify-between items-center relative z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-6 bg-gradient-to-b from-[#BF953F] to-[#AA771C] transform -skew-x-12"></div>
+            <span class="f1-font text-xl font-black tracking-wider text-white">ULTIMATE <span class="gold-grad">FANTASY</span></span>
+        </div>
+        <div class="flex space-x-6 text-sm font-bold tracking-widest uppercase f1-font">
+            <button onclick="cambiarPestana('equipo')" id="btn-equipo" class="text-[#BF953F] border-b-2 border-[#BF953F] pb-1 cursor-pointer focus:outline-none">Mi Equipo</button>
+            <button onclick="cambiarPestana('alineacion')" id="btn-alineacion" class="text-gray-400 hover:text-[#BF953F] transition cursor-pointer focus:outline-none">Alineacion</button>
+            <button onclick="cambiarPestana('clasificacion')" id="btn-clasificacion" class="text-gray-400 hover:text-[#BF953F] transition cursor-pointer focus:outline-none">Clasificacion</button>
+        </div>
+    </nav>
+
+    <header class="max-w-7xl mx-auto px-4 py-6">
+        <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="text-xs uppercase tracking-widest text-gray-500 font-bold">Ultimate F1 League</p>
+                <h1 id="titulo-pantalla" class="text-2xl font-black text-white f1-font">Mi Escuderia</h1>
+            </div>
+            <div class="flex gap-8">
+                <div class="text-center">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Presupuesto Disponible</p>
+                    <p id="presupuesto-txt" class="text-3xl font-bold text-emerald-400 f1-font">$100M</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Pilotos</p>
+                    <p id="contador-pilotos" class="text-3xl font-bold text-white f1-font">0 / 5</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="pantalla-equipo" class="tab-content active max-w-7xl mx-auto px-4 pb-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2"><span class="text-[#BF953F]">//</span> Mis Pilotos Contratados</h2>
+            <div id="mi-equipo-lista" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2 pt-4"><span class="text-[#BF953F]">//</span> Constructor Seleccionado</h2>
+            <div id="mi-constructor-zona" class="bg-[#161616] border border-dashed border-[#333] rounded-xl p-6 text-center text-gray-500"></div>
+        </div>
+        <div class="space-y-6">
+            <h2 class="f1-font text-lg font-bold uppercase text-white flex items-center gap-2"><span class="text-[#BF953F]">//</span> Mercado de Fichajes</h2>
+            <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-4">
+                <h3 class="text-sm font-bold text-[#BF953F] uppercase tracking-wider mb-3 f1-font">Elegir Constructor</h3>
+                <select id="select-constructor" class="w-full bg-[#1f1f1f] border border-[#333] rounded px-3 py-2 text-white text-sm" onchange="seleccionarConstructor()">
+                    <option value="">-- Selecciona un Equipo --</option>
+                    <option value="Ferrari-22-https://upload.wikimedia.org/wikipedia/de/c/c0/Logo_Scuderia_Ferrari.svg">Ferrari ($22M)</option>
+                    <option value="Red Bull-22-https://upload.wikimedia.org/wikipedia/en/2/29/Red_Bull_Racing_logo.svg">Red Bull ($22M)</option>
+                    <option value="McLaren-22-https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg">McLaren ($22M)</option>
+                    <option value="Mercedes-22-https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes_AMG_Petronas_F1_Logo.svg">Mercedes ($22M)</option>
+                    <option value="Aston Martin-15-https://upload.wikimedia.org/wikipedia/en/3/3a/Aston_Martin_Aramco_Cognizant_F1_logo.svg">Aston Martin ($15M)</option>
+                    <option value="Alpine-15-https://upload.wikimedia.org/wikipedia/en/b/b7/Alpine_F1_Team_Logo.svg">Alpine ($15M)</option>
+                    <option value="Audi-15-https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg">Audi ($15M)</option>
+                    <option value="Haas-8-https://upload.wikimedia.org/wikipedia/commons/1/12/Haas_F1_Team_logo.svg">Haas ($8M)</option>
+                    <option value="Williams-8-https://upload.wikimedia.org/wikipedia/commons/e/e1/Williams_Racing_logo.svg">Williams ($8M)</option>
+                    <option value="Cadillac-8-https://upload.wikimedia.org/wikipedia/commons/c/c9/Cadillac_logo.svg">Cadillac ($8M)</option>
+                    <option value="AlphaTauri-8-https://upload.wikimedia.org/wikipedia/en/3/31/AlphaTauri_logo.svg">AlphaTauri ($8M)</option>
+                </select>
+            </div>
+            <div id="mercado-pilotos" class="bg-[#161616] border border-[#2A2A2A] rounded-xl p-4 space-y-2 max-h-[500px] overflow-y-auto"></div>
+        </div>
+    </main>
+
+    <main id="pantalla-alineacion" class="tab-content max-w-7xl mx-auto px-4 pb-12 space-y-8">
+        <div><h2 class="f1-font text-lg font-bold uppercase text-white mb-4"><span class="text-[#BF953F]">//</span> Estructura de Carrera</h2><div id="alineacion-constructor"></div></div>
+        <div><h2 class="f1-font text-lg font-bold uppercase text-white mb-4"><span class="text-[#BF953F]">//</span> Pilotos en Parrilla</h2><div id="alineacion-pilotos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"></div></div>
+    </main>
+
+    <main id="pantalla-clasificacion" class="tab-content max-w-7xl mx-auto px-4 pb-12">
+        <h2 class="f1-font text-lg font-bold uppercase text-white mb-6"><span class="text-[#BF953F]">//</span> Clasificacion</h2>
+        <div class="bg-[#161616] border border-[#2A2A2A] rounded-xl overflow-hidden"><table class="w-full text-left" id="tabla-puntos"></table></div>
+    </main>
+
+    <script>
+        const pilotosDatos = [
+            { nombre: "Alvaro", cat: "TOP", precio: 25 }, { nombre: "Asenjo", cat: "TOP", precio: 25 },
+            { nombre: "Pablo", cat: "Media-Alta", precio: 18 }, { nombre: "Mariux", cat: "Media-Alta", precio: 18 },
+            { nombre: "Jose", cat: "Media-Alta", precio: 18 }, { nombre: "Noah", cat: "Media-Alta", precio: 18 },
+            { nombre: "Eric", cat: "Media-Alta", precio: 18 }, { nombre: "Hugo", cat: "Media-Alta", precio: 18 },
+            { nombre: "Fran", cat: "Media-Alta", precio: 18 }, { nombre: "Daniel", cat: "Media-Alta", precio: 18 },
+            { nombre: "Ivan", cat: "Media", precio: 12 }, { nombre: "Javier", cat: "Media", precio: 12 },
+            { nombre: "Mario", cat: "Media", precio: 12 }, { nombre: "Adrian", cat: "Media", precio: 12 },
+            { nombre: "Miguez", cat: "Media", precio: 12 }, { nombre: "Cherif", cat: "Media", precio: 12 },
+            { nombre: "Juanmi", cat: "Media", precio: 12 }, { nombre: "Samu", cat: "Media", precio: 12 },
+            { nombre: "Asier", cat: "Media", precio: 12 }, { nombre: "Joel", cat: "Media", precio: 12 },
+            { nombre: "Seba", cat: "Baja", precio: 6 }, { nombre: "Xavi", cat: "Baja", precio: 6 },
+            { nombre: "Joaquin", cat: "Baja", precio: 6 }
+        ];
+
+        let presupuesto = 100, misPilotos = [], miConstructor = null;
+
+        function cambiarPestana(p) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('pantalla-' + p).classList.add('active');
+            if(p === 'alineacion') renderizarAlineacion();
+        }
+
+        function seleccionarConstructor() {
+            const val = document.getElementById('select-constructor').value;
+            if(!val) { miConstructor = null; } 
+            else {
+                const [nombre, precio, logo] = val.split('-');
+                miConstructor = { nombre, precio: parseInt(precio), logo };
+            }
+            actualizarUI();
+        }
+
+        function ficharPiloto(nombre) {
+            const p = pilotosDatos.find(x => x.nombre === nombre);
+            if(misPilotos.length < 5 && presupuesto >= p.precio) {
+                presupuesto -= p.precio;
+                misPilotos.push(p);
+                actualizarUI();
+            }
+        }
+
+        function renderizarAlineacion() {
+            const zonaC = document.getElementById('alineacion-constructor');
+            if(miConstructor) {
+                zonaC.innerHTML = `<div class="bg-[#161616] border border-[#BF953F] rounded-xl p-6 flex items-center space-x-4 max-w-md"><img src="${miConstructor.logo}" class="w-16 h-16 bg-white p-2 rounded"><div><p class="text-xs text-gray-500 font-bold">CONSTRUCTOR</p><h3 class="text-xl font-bold text-white">${miConstructor.nombre}</h3></div></div>`;
+            }
+            document.getElementById('alineacion-pilotos').innerHTML = misPilotos.map(p => `<div class="bg-[#161616] p-4 text-center border border-[#2A2A2A] rounded-xl">${p.nombre}</div>`).join('');
+        }
+
+        function actualizarUI() {
+            document.getElementById('presupuesto-txt').innerText = `$${presupuesto}M`;
+            document.getElementById('contador-pilotos').innerText = `${misPilotos.length} / 5`;
+            const mercado = document.getElementById('mercado-pilotos');
+            mercado.innerHTML = pilotosDatos.map(p => `<div class="flex justify-between items-center bg-[#1f1f1f] p-2 rounded">${p.nombre} <button onclick="ficharPiloto('${p.nombre}')" class="bg-[#BF953F] text-black px-2 py-1 text-xs font-bold">FICHAR</button></div>`).join('');
+            const lista = document.getElementById('mi-equipo-lista');
+            lista.innerHTML = misPilotos.map(p => `<div class="bg-[#161616] p-4 border border-[#2A2A2A] rounded-xl">${p.nombre}</div>`).join('');
+            const zonaC = document.getElementById('mi-constructor-zona');
+            zonaC.innerHTML = miConstructor ? `<div class="text-xl font-bold text-white">${miConstructor.nombre}</div>` : "Ninguno";
+        }
+        
+        window.onload = actualizarUI;
+    </script>
+</body>
+</html>
